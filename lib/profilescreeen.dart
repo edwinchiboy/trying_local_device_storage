@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testing_storing_device/helper.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String emailAddress;
@@ -21,8 +22,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String? data;
   final bool _isLoading = false;
-  late final List displayName;
+  Storage storage = Storage();
+
+  @override
+  void initState() {
+    super.initState();
+    storage.readData().then((String value) {
+      setState(() {
+        data = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
@@ -43,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Chiboy'),
+                    Text(data ?? ' '),
                   ],
                 ),
               )),

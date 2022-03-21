@@ -11,7 +11,7 @@ class Storage {
 
   Future<File> get localFile async {
     final path = await localPath;
-    return File('$path/db.txt');
+    return File('$path/data.txt');
   }
 
   Future<String> readData() async {
@@ -24,10 +24,16 @@ class Storage {
     }
   }
 
-  Future<File> writeData(String data) async {
+  Future writeData(userName, password) async {
     final file = await localFile;
-    return file.writeAsString(data);
+    file.writeAsString(userName);
+    file.writeAsString(password, mode: FileMode.append);
   }
+
+  // Future<File> writeData(String data) async {
+  //   final file = await localFile;
+  //   return file.writeAsString('$data');
+  // }
 }
 
 class Helper {

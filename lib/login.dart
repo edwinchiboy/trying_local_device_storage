@@ -31,6 +31,7 @@ class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController _dateofBirthTextFieldController =
       TextEditingController();
   Helper helper = Helper();
+  Storage storage = Storage();
 
   final List<String> _locations = [
     "Abia",
@@ -90,14 +91,9 @@ class _LogInScreenState extends State<LogInScreen> {
         !_showConfirmPasswordError &&
         !_showDOBError &&
         !_showLocationError) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setStringList('displayName', [
-        _emailController.text.toString(),
-        _passwordController.text.toString(),
-        _dateofBirthTextFieldController.text.toString(),
-        _selectedLocation.toString(),
-        _userGender
-      ]);
+      storage.writeData(_emailController.text.toString(),
+          _passwordController.text.toString());
+
       Navigator.push(
           context,
           MaterialPageRoute(
