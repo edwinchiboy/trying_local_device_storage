@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testing_storing_device/DB_helper.dart';
 import 'package:testing_storing_device/helper.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -24,16 +25,22 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String? data;
   final bool _isLoading = false;
-  Storage storage = Storage();
+  // Storage storage = Storage();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   storage.readData().then((String value) {
+  //     setState(() {
+  //       data = value;
+  //     });
+  //   });
+  // }
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    storage.readData().then((String value) {
-      setState(() {
-        data = value;
-      });
-    });
   }
 
   @override
@@ -56,7 +63,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(data ?? ' '),
+                    FlatButton(
+                      onPressed: () async {
+                        int i = await DataBaseHelper.instance.insert({
+                          DataBaseHelper.columnUserEmail: 'choboy@gmail.com',
+                          // DataBaseHelper.columnUserPassword: '08060877-41',
+                          // DataBaseHelper.columnUserGender: 'Male',
+                          // DataBaseHelper.columnUserLocation: 'Abuja',
+                        });
+                        print('The inserted id is $i');
+                      },
+                      child: const Text('Insert'),
+                    ),
+                    FlatButton(
+                      onPressed: () async {
+                        List<Map<String, dynamic>> queryRows =
+                            await DataBaseHelper.instance.queryAll();
+                        print(queryRows);
+                      },
+                      child: const Text('Query'),
+                    ),
+                    FlatButton(
+                      onPressed: () async {
+                        int updatedId = await DataBaseHelper.instance.update({
+                          DataBaseHelper.columnId: 12,
+                          DataBaseHelper.columnUserEmail: 'Chiboy@gmail'
+                        });
+                        print(updatedId);
+                      },
+                      child: const Text('Update'),
+                    ),
+                    FlatButton(
+                      onPressed: () async {
+                        int rowaEffected =
+                            await DataBaseHelper.instance.delete(13);
+                        print(rowaEffected);
+                      },
+                      child: const Text('Delete'),
+                    ),
                   ],
                 ),
               )),

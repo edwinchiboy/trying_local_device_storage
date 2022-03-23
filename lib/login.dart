@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
-import 'package:testing_storing_device/helper.dart';
+//import 'package:testing_storing_device/helper.dart';
 import 'package:testing_storing_device/profilescreeen.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   DateTime? selectedDate;
   dynamic _userGender = "male";
-  bool _loginAuthMode = true;
+  bool _loginAuthMode = false;
   bool _showEmailError = false;
   bool _showPasswordError = false;
   bool _showConfirmPasswordError = false;
@@ -30,8 +30,8 @@ class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _dateofBirthTextFieldController =
       TextEditingController();
-  Helper helper = Helper();
-  Storage storage = Storage();
+  //Helper helper = Helper();
+  // Storage storage = Storage();
 
   final List<String> _locations = [
     "Abia",
@@ -91,8 +91,8 @@ class _LogInScreenState extends State<LogInScreen> {
         !_showConfirmPasswordError &&
         !_showDOBError &&
         !_showLocationError) {
-      storage.writeData(_emailController.text.toString(),
-          _passwordController.text.toString());
+      //  storage.writeData(_emailController.text.toString(),
+      //     _passwordController.text.toString());
 
       Navigator.push(
           context,
