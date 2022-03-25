@@ -1,11 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:testing_storing_device/DB_helper.dart';
+import 'package:testing_storing_device/DB_helper2.dart';
+import 'package:testing_storing_device/DB_model.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 //import 'package:testing_storing_device/helper.dart';
 import 'package:testing_storing_device/profilescreeen.dart';
+import 'package:testing_storing_device/read_data_page.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({Key? key}) : super(key: key);
@@ -78,7 +82,34 @@ class _LogInScreenState extends State<LogInScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    DBHelper2.instance.close();
+
     super.dispose();
+  }
+
+  late List<DBModel> userProfiles;
+  bool isloading = false;
+  @override
+  void initState() {
+    super.initState();
+    refreshData();
+  }
+
+  Future refreshData() async {
+    setState(() => isloading = true);
+    userProfiles = await DBHelper2.instance.readAllDB();
+    setState(() => isloading = false);
+  }
+
+  Future addNote() async {
+    final userProfile = DBModel(
+      userEmail: _emailController.text.toString(),
+      userPassword: _passwordController.text.toString(),
+      userDOB: _dateofBirthTextFieldController.text.toString(),
+      userGender: _userGender,
+      userLocation: _selectedLocation.toString(),
+    );
+    await DBHelper2.instance.create(userProfile);
   }
 
   void _submit() async {
@@ -91,9 +122,7 @@ class _LogInScreenState extends State<LogInScreen> {
         !_showConfirmPasswordError &&
         !_showDOBError &&
         !_showLocationError) {
-      //  storage.writeData(_emailController.text.toString(),
-      //     _passwordController.text.toString());
-
+      addNote();
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -639,15 +668,22 @@ class _LogInScreenState extends State<LogInScreen> {
                                 alignment: Alignment.topRight,
                                 child: Padding(
                                   padding: EdgeInsets.only(
+                                    top: 5,
                                     right: deviceWidth * 0.1,
                                   ),
                                   child: Text(
-                                    'Forgot Password ?',
+                                    'See Details Page',
                                     style: greyMinStyle,
                                   ),
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            const ReadDataScreen())));
+                              },
                             )),
                       ),
                       SizedBox(

@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:path/path.dart';
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:testing_storing_device/DB_model.dart';
 
@@ -26,13 +24,12 @@ class DBHelper2 {
     const textType = 'TEXT NOT NULL';
     await db.execute(''' 
       CREATE TABLE $tableDB (
-        ${DBField.id}$idType,
-        ${DBField.userDOB}$textType,
-        ${DBField.userEmail}$textType,
-        ${DBField.userGender}$textType,
-        ${DBField.userLocation}$textType,
-        ${DBField.userPassword}$textType,
-      )
+        ${DBField.id} $idType,
+        ${DBField.userDOB} $textType,
+        ${DBField.userEmail} $textType,
+        ${DBField.userGender} $textType,
+        ${DBField.userLocation} $textType,
+        ${DBField.userPassword} $textType )
       ''');
   }
 
@@ -42,7 +39,7 @@ class DBHelper2 {
     return userSignInDetail.copy(id: id);
   }
 
-  Future<DBModel> readDB(int id) async {
+  Future<DBModel> readDB(int? id) async {
     final db = await instance.database;
     final maps = await db.query(
       tableDB,
@@ -74,7 +71,7 @@ class DBHelper2 {
     );
   }
 
-  Future<int> delete(int id) async {
+  Future<int> delete(int? id) async {
     final db = await instance.database;
     return await db.delete(
       tableDB,
@@ -85,6 +82,8 @@ class DBHelper2 {
 
   Future close() async {
     final db = await instance.database;
+    _database = null;
+
     db.close();
   }
 }

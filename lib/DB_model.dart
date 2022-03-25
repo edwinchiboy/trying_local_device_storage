@@ -24,7 +24,7 @@ class DBModel {
   final int? id;
   final String userEmail;
   final String userPassword;
-  final DateTime userDOB;
+  final String userDOB;
   final String userLocation;
   final String userGender;
   const DBModel({
@@ -39,7 +39,7 @@ class DBModel {
     int? id,
     String? userEmail,
     String? userPassword,
-    DateTime? userDOB,
+    String? userDOB,
     String? userLocation,
     String? userGender,
   }) =>
@@ -55,7 +55,7 @@ class DBModel {
         DBField.id: id,
         DBField.userEmail: userEmail,
         DBField.userPassword: userPassword,
-        DBField.userDOB: userDOB.toString(),
+        DBField.userDOB: userDOB,
         DBField.userLocation: userLocation,
         DBField.userGender: userGender,
       };
@@ -63,7 +63,7 @@ class DBModel {
         id: json[DBField.id] as int?,
         userEmail: json[DBField.userEmail] as String,
         userPassword: json[DBField.userPassword] as String,
-        userDOB: DateTime.parse(json[DBField.userDOB] as String),
+        userDOB: json[DBField.userDOB] as String,
         userLocation: json[DBField.userLocation] as String,
         userGender: json[DBField.userLocation] as String,
       );
