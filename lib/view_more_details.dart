@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:testing_storing_device/DB_helper2.dart';
 import 'package:testing_storing_device/DB_model.dart';
+import 'package:testing_storing_device/login.dart';
+import 'package:testing_storing_device/read_data_page.dart';
 
 class ViewMoreDetailScreen extends StatefulWidget {
   final int? userDetailId;
@@ -34,12 +36,20 @@ class _ViewMoreDetailScreenState extends State<ViewMoreDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('User profile')),
+        title: Center(
+            child: Text(
+          ' User  ${userDetail.id} profile',
+          style: const TextStyle(fontSize: 15),
+        )),
         actions: [
           IconButton(
             onPressed: () async {
               await DBHelper2.instance.delete(widget.userDetailId);
-              Navigator.of(context).pop();
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          const ReadDataScreen()));
             },
             icon: const Icon(
               Icons.delete,
@@ -48,8 +58,12 @@ class _ViewMoreDetailScreenState extends State<ViewMoreDetailScreen> {
           ),
           IconButton(
             onPressed: () async {
-              // if (isloading) return;
-              // await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LogInScreen(userProfile=)))
+              await Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LogInScreen(userDetail: userDetail)),
+                (Route<dynamic> route) => false,
+              );
             },
             icon: const Icon(
               Icons.edit,

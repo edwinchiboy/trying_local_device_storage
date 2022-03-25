@@ -5,10 +5,10 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DataBaseHelper {
-  static final _dbVersion = 1;
-  static final _dbName = 'myDatabase.db';
-  static final _tableName = 'myTable';
-  static final columnId = '_id';
+  static const _dbVersion = 1;
+  static const _dbName = 'myDatabase.db';
+  static const _tableName = 'myTable';
+  static const columnId = '_id';
 
   static final columnUserEmail = '_email';
   static final columnUserPassword = '_password';

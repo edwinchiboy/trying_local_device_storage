@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:testing_storing_device/DB_helper.dart';
 import 'package:testing_storing_device/DB_helper2.dart';
 import 'package:testing_storing_device/DB_model.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +11,8 @@ import 'package:testing_storing_device/profilescreeen.dart';
 import 'package:testing_storing_device/read_data_page.dart';
 
 class LogInScreen extends StatefulWidget {
-  const LogInScreen({Key? key}) : super(key: key);
+  final DBModel? userDetail;
+  const LogInScreen({Key? key, this.userDetail}) : super(key: key);
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -113,26 +113,37 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   void _submit() async {
-    if (!_formkey.currentState!.validate()) {
-      return;
-    }
-    _formkey.currentState!.save();
-    if (!_showEmailError &&
-        !_showPasswordError &&
-        !_showConfirmPasswordError &&
-        !_showDOBError &&
-        !_showLocationError) {
-      addNote();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: ((context) => ProfileScreen(
-                    emailAddress: _emailController.text.toString(),
-                    password: _passwordController.text.toString(),
-                    dOB: _dateofBirthTextFieldController.text.toString(),
-                    location: _selectedLocation.toString(),
-                    gender: _userGender,
-                  ))));
+    if (!_loginAuthMode) {
+      if (!_formkey.currentState!.validate()) {
+        return;
+      }
+      _formkey.currentState!.save();
+      if (!_showEmailError &&
+          !_showPasswordError &&
+          !_showConfirmPasswordError &&
+          !_showDOBError &&
+          !_showLocationError) {
+        addNote();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: ((context) => ProfileScreen(
+                      emailAddress: _emailController.text.toString(),
+                      password: _passwordController.text.toString(),
+                      dOB: _dateofBirthTextFieldController.text.toString(),
+                      location: _selectedLocation.toString(),
+                      gender: _userGender,
+                    ))));
+      }
+    } else {
+      if (!_formkey.currentState!.validate()) {
+        return;
+      }
+      _formkey.currentState!.save();
+      if (!_showEmailError && !_showPasswordError) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: ((context) => const ReadDataScreen())));
+      }
     }
   }
 
@@ -269,14 +280,15 @@ class _LogInScreenState extends State<LogInScreen> {
                           maxLines: 1,
                           keyboardType: TextInputType.emailAddress,
                           controller: _emailController,
-                          style: const TextStyle(fontSize: 10),
+                          style: const TextStyle(fontSize: 12),
                           decoration: InputDecoration(
                             //labelText: ' Enter your Email',
 
                             border: InputBorder.none,
                             hintText: "Email",
                             hintStyle: greyMinStyle,
-                            contentPadding: const EdgeInsets.all(0),
+                            // contentPadding:
+                            //   const EdgeInsets.fromLTRB(0, 0, 5, 0),
                             prefixIcon: const Icon(
                               Icons.email_outlined,
                               size: 15,
@@ -332,7 +344,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             border: InputBorder.none,
                             hintText: "Password",
                             hintStyle: greyMinStyle,
-                            contentPadding: const EdgeInsets.all(0),
+                            //contentPadding: const EdgeInsets.all(0),
                             suffixIcon: IconButton(
                               icon: Icon(
                                   _obscurePassword
@@ -403,7 +415,7 @@ class _LogInScreenState extends State<LogInScreen> {
                               border: InputBorder.none,
                               hintText: "Confirm Password",
                               hintStyle: greyMinStyle,
-                              contentPadding: const EdgeInsets.all(0),
+                              // contentPadding: const EdgeInsets.all(0),
                               prefixIcon: const Icon(
                                 Icons.key_outlined,
                                 size: 15,
@@ -552,7 +564,7 @@ class _LogInScreenState extends State<LogInScreen> {
                               border: InputBorder.none,
                               hintText: "enter date of Birth",
                               hintStyle: greyMinStyle,
-                              contentPadding: const EdgeInsets.all(0),
+                              //contentPadding: const EdgeInsets.all(0),
                               prefixIcon: const Icon(
                                 Icons.calendar_month_outlined,
                                 size: 15,
@@ -677,13 +689,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                   ),
                                 ),
                               ),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            const ReadDataScreen())));
-                              },
+                              onTap: () {},
                             )),
                       ),
                       SizedBox(

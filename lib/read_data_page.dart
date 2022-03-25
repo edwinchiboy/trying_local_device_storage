@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testing_storing_device/DB_helper2.dart';
 import 'package:testing_storing_device/DB_model.dart';
+import 'package:testing_storing_device/login.dart';
 import 'package:testing_storing_device/view_more_details.dart';
 
 class ReadDataScreen extends StatefulWidget {
@@ -26,36 +27,70 @@ class _ReadDataScreenState extends State<ReadDataScreen> {
   }
 
   Future refreshData() async {
-    return userProfiles = await DBHelper2.instance.readAllDB();
+    userProfiles = await DBHelper2.instance.readAllDB();
+
+    // setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Center(child: Text('MY screen')),
-        ),
-        body: FutureBuilder(
-            future: refreshData(),
-            builder: (ctx, snapshot) =>
-                snapshot.connectionState == ConnectionState.waiting
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : RefreshIndicator(
-                        onRefresh: () => refreshData(),
-                        child: userProfiles.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  'No Registered User yet',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 15,
-                                  ),
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text('All Registered User ID screen'),
+          ),
+          body: RefreshIndicator(
+            onRefresh: () => refreshData(),
+            child: FutureBuilder(
+              future: refreshData(),
+              builder: (ctx, snapshot) =>
+                  snapshot.connectionState == ConnectionState.waiting
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : userProfiles.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'No Registered User yet',
+                                style: TextStyle(
+                                  color: Colors.orange,
+                                  fontSize: 15,
                                 ),
-                              )
-                            : buildUsers(),
-                      )));
+                              ),
+                            )
+                          : buildUsers(),
+            ),
+          )),
+    );
+  }
+
+  Future<bool> onWillPop() async {
+    final shouldPop = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Log out?'),
+        content: const Text('You want to leave the app?'),
+        actions: [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('No'),
+          ),
+          FlatButton(
+            onPressed: () async {
+              await Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LogInScreen()),
+                (Route<dynamic> route) => false,
+              );
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+
+    return shouldPop ?? false;
   }
 
   Widget buildUsers() => Padding(
@@ -73,7 +108,7 @@ class _ReadDataScreenState extends State<ReadDataScreen> {
                   InkWell(
                     child: Text(
                       'Click to see more User ${userProfile.id} details',
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                     onTap: () async {
                       await Navigator.of(context).push(MaterialPageRoute(
@@ -87,6 +122,10 @@ class _ReadDataScreenState extends State<ReadDataScreen> {
                     children: [
                       IconButton(
                           onPressed: () async {
+                            await DBHelper2.instance.delete(userProfile.id);
+                            setState(() {
+                              refreshData();
+                            });
                             // await DBHelper2.instance
                             //     .delete(widget..id);
                           },
@@ -96,6 +135,14 @@ class _ReadDataScreenState extends State<ReadDataScreen> {
                           )),
                       IconButton(
                           onPressed: () async {
+                            await Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LogInScreen(
+                                        userDetail: userProfile,
+                                      )),
+                              (Route<dynamic> route) => false,
+                            );
                             // if (isloading) return;
                             // await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LogInScreen(userProfile=)))
                           },
