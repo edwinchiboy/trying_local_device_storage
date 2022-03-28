@@ -19,6 +19,14 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
+  late String email;
+  late String password;
+  late String dOB;
+  late String location;
+  late String gender;
+
+  dynamic _selectedLocation;
+  final _formkey = GlobalKey<FormState>();
   DateTime? selectedDate;
   dynamic _userGender = "male";
   bool _loginAuthMode = false;
@@ -76,8 +84,7 @@ class _LogInScreenState extends State<LogInScreen> {
     "Yobe",
     "Zamfara"
   ];
-  dynamic _selectedLocation;
-  final _formkey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     _emailController.dispose();

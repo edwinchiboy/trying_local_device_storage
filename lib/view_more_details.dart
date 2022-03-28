@@ -56,20 +56,20 @@ class _ViewMoreDetailScreenState extends State<ViewMoreDetailScreen> {
               color: Colors.black,
             ),
           ),
-          IconButton(
-            onPressed: () async {
-              await Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => LogInScreen(userDetail: userDetail)),
-                (Route<dynamic> route) => false,
-              );
-            },
-            icon: const Icon(
-              Icons.edit,
-              color: Colors.black,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () async {
+          //     await Navigator.pushAndRemoveUntil(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => LogInScreen(userDetail: userDetail)),
+          //       (Route<dynamic> route) => false,
+          //     );
+          //   },
+          //   icon: const Icon(
+          //     Icons.edit,
+          //     color: Colors.black,
+          //   ),
+          // ),
         ],
       ),
       body: isLoading

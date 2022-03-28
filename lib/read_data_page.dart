@@ -133,23 +133,23 @@ class _ReadDataScreenState extends State<ReadDataScreen> {
                             Icons.delete,
                             color: Colors.orange,
                           )),
-                      IconButton(
-                          onPressed: () async {
-                            await Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LogInScreen(
-                                        userDetail: userProfile,
-                                      )),
-                              (Route<dynamic> route) => false,
-                            );
-                            // if (isloading) return;
-                            // await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LogInScreen(userProfile=)))
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Colors.orange,
-                          ))
+                      // IconButton(
+                      //     onPressed: () async {
+                      //       await Navigator.pushAndRemoveUntil(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) => LogInScreen(
+                      //                   userDetail: userProfile,
+                      //                 )),
+                      //         (Route<dynamic> route) => false,
+                      //       );
+                      //       // if (isloading) return;
+                      //       // await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LogInScreen(userProfile=)))
+                      //     },
+                      //     icon: const Icon(
+                      //       Icons.edit,
+                      //       color: Colors.orange,
+                      //     ))
                     ],
                   ),
                   const Divider(),
